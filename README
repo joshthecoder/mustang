@@ -1,0 +1,8 @@
+Mustang
+=======
+A template engine for the ooc programming language.
+Inspired by Mustache, CTemplates, and Django.
+
+
+Author: Joshua Roesslein
+License: BSD

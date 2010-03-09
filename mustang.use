@@ -1,0 +1,5 @@
+Name: Mustang
+Version: 1.0
+Origin: git://github.com/joshthecoder/mustang.git
+Description: A template engine
+SourcePath: .
