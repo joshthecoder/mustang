@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='content-type' value='text/html;charset=utf8'>
+  <meta name='generator' value='Ronn/v0.4.1'>
+  <title>mustang(1) -- mustang template compiler</title>
+  <style type='text/css'>
+    body {margin:0}
+    #man, #man code, #man pre, #man tt, #man kbd, #man samp {
+      font-family:consolas,monospace;
+      font-size:16px;
+      line-height:1.3;
+      color:#343331;
+      background:#fff; }
+    #man { max-width:89ex; text-align:justify; margin:0 25px 25px 25px }
+    #man h1, #man h2, #man h3 { color:#232221;clear:left }
+    #man h1 { font-size:28px; margin:15px 0 30px 0; text-align:center }
+    #man h2 { font-size:18px; margin-bottom:0; margin-top:10px; line-height:1.3; }
+    #man h3 { font-size:16px; margin:0 0 0 4ex; }
+    #man p, #man ul, #man ol, #man dl, #man pre { margin:0 0 18px 0; }
+    #man pre {
+      color:#333231;
+      background:#edeceb;
+      padding:5px 7px;
+      margin:0px 0 20px 0;
+      border-left:2ex solid #ddd}
+    #man pre + h2, #man pre + h3 {
+      margin-top:22px;
+    }
+    #man h2 + pre, #man h3 + pre {
+      margin-top:5px;
+    }
+    #man > p, #man > ul, #man > ol, #man > dl, #man > pre { margin-left:8ex; }
+    #man dt { margin:0; clear:left }
+    #man dt.flush { float:left; width:8ex }
+    #man dd { margin:0 0 0 9ex }
+    #man code, #man strong, #man b { font-weight:bold; color:#131211; }
+    #man pre code { font-weight:normal; color:#232221; background:inherit }
+    #man em, var, u {
+      font-style:normal; color:#333231; border-bottom:1px solid #999; }
+    #man h1.man-title { display:none; }
+    #man ol.man, #man ol.man li { margin:2px 0 10px 0; padding:0;
+      float:left; width:33%; list-style-type:none;
+      text-transform:uppercase; font-size:18px; color:#999;
+      letter-spacing:1px;}
+    #man ol.man { width:100%; }
+    #man ol.man li.tl { text-align:left }
+    #man ol.man li.tc { text-align:center;letter-spacing:4px }
+    #man ol.man li.tr { text-align:right }
+    #man ol.man a { color:#999 }
+    #man ol.man a:hover { color:#333231 }
+  </style>
+</head>
+<body>
+<div id='man'>
+
+<h1 class='man-title'>mustang(1)</h1>
+
+<ol class='head man'>
+  <li class='tl'>mustang(1)</li>
+  <li class='tc'></li>
+  <li class='tr'>mustang(1)</li>
+</ol>
+
+<h2 id='NAME'>NAME</h2>
+<p><code>mustang</code> -- mustang template compiler</p>
+
+<h2>SYNOPSIS</h2>
+
+<p><code>mustang</code> --compile <var>TEMPLATE</var> <var>VIEW</var> <br />
+<code>mustang</code> --render <var>TEMPLATE</var> <var>DATA</var>  <br />
+<code>mustang</code> --serve <var>TEMPLATE</var> <var>DATA</var> [[HOST:]PORT]  <br />
+<code>mustang</code> --validate <var>TEMPLATE</var></p>
+
+<h2>DESCRIPTION</h2>
+
+<p>Mustang is a template engine for the ooc programming language.
+It was inspired by Mustache templates. Mustang's syntax is fully
+compatible with Mustache. Mustang should compile mustache templates
+with no issues.</p>
+
+<p>The <code>mustang</code> command is able to compile, render, or server
+templates.</p>
+
+<h2>COMPILING</h2>
+
+<p>Compiling requires the <var>TEMPLATE</var> file to be processed and the associated
+<var>VIEW</var> class that supplies the data. A View class may look like this:</p>
+
+<pre><code>MyView: class extends View {
+    url: String
+    title: String
+    viewCount: Int
+}
+</code></pre>
+
+<p>A template to go with this view might look like:</p>
+
+<pre><code>&lt;a href="{{url}}"&gt;{{name}} (viewed {{viewCount}})&lt;/a&gt;
+</code></pre>
+
+<p>Then compile the template with this command:</p>
+
+<pre><code>`mustang` --compile example.mustang MyView.ooc
+</code></pre>
+
+<h2>RENDERING</h2>
+
+<p>Rendering allows supplying data in the form of a JSON file
+which is then used to render the template.
+Here is some mock data for our template:</p>
+
+<pre><code>{
+    "url": "http://ooc-lang.org",
+    "title": ""ooc homepage",
+    "viewCount": 10000
+}
+</code></pre>
+
+<p>We can then render the template with the following command:</p>
+
+<pre><code>`mustang` --render example.mustang data.json &gt; rendered.html
+</code></pre>
+
+<p>Notice the rendered output is sent via standard out which can
+then be directed where you need it to go.</p>
+
+<h2>SERVE</h2>
+
+<p>Another handy feature to use during template development is the serve option.
+This runs an embedded web server which serves the rendered template via HTTP.
+To serve the above template with our mock data execute:</p>
+
+<pre><code>`mustang` --serve example.mustang data.json
+</code></pre>
+
+<p>You can then view this rendered template at: http://localhost:8000/
+The template will always be freshly rendered for each page request.
+This makes it very convenient to quickly preview your template with
+updates shown on the fly.</p>
+
+<h2>VALIDATE</h2>
+
+<p>Checks for any syntax errors in the <var>TEMPLATE</var> file.
+Any errors found will be printed via standard out.</p>
+
+<h2>OPTIONS</h2>
+
+<p>TODO: document any options here</p>
+
+<h2>COPYRIGHT</h2>
+
+<p>Copyright 2010 Joshua Roesslein
+Licensed under the BSD license.
+See LICENSE for more details.</p>
+
+<h2>SEE ALSO</h2>
+
+<p>mustang(5), mustache(5)</p>
+
+
+<ol class='foot man'>
+  <li class='tl'></li>
+  <li class='tc'>March 2010</li>
+  <li class='tr'>mustang(1)</li>
+</ol>
+
+</div>
+</body>
+</html>

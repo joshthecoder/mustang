@@ -5,5 +5,9 @@ all: mustang/*.ooc
 clean:
 	rm -rf bin
 
+manpages:
+	ronn -b man/*.ronn --roff --html
+
 install:
 	cp bin/mustang /usr/bin
+	cp man/*.1 /usr/local/man/man1
