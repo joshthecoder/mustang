@@ -1,10 +1,19 @@
-Node: abstract class {
-    /**
-        Called to compile the token into ooc code used to render at runtime.
-    */
-    compile: abstract class(m: ContextMetaInfo, c: Composer)
+/**
+    Base node interface
+*/
+BaseNode: abstract class {
+    compile: abstract func
 }
 
-ContextMetaInfo: class {}
+/**
+    Represents all the plain text in a template file.
+*/
+TextNode: class extends BaseNode {
+    offset, length: Int
 
-Composer: class {}
+    init: func(=offset, =length) {
+        "Got text at %d length %d" format(offset, length) println()
+    }
+
+    compile: func {}
+}
