@@ -1,5 +1,3 @@
-use mustang
-
 import structs/[List, LinkedList]
 import mustang/[TemplateReader, Node]
 
@@ -23,7 +21,7 @@ TagParser: abstract class {
     /**
         Parse the token text and return a Node.
     */
-    parse: abstract func(token: String) -> Node
+    parse: abstract func(token: String) -> BaseNode
 }
 
 
