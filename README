@@ -1,7 +1,8 @@
 Mustang
 =======
 A template engine for the ooc programming language.
-Inspired by Mustache, CTemplates, and Django.
+Will be compatible with Mustache and CTemplate syntax.
+Also will support the use of custom tags.
 
 
 Author: Joshua Roesslein
