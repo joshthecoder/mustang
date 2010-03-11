@@ -17,11 +17,16 @@ import mustang/[TemplateReader, Node, TagParser]
 TemplateParser: class {
     template: TemplateReader
     nodes: List<TNode>
+    parsers: List<TagParser>
     startTag, endTag: String
     state: Int
 
     init: func(=template, =startTag, =endTag) {
+        parsers = LinkedList<TagParser> new()
         state = 1
+
+        // load builtin parsers
+        loadBuiltinParsers(parsers)
     }
 
     parse: func -> List<TNode> {
@@ -42,28 +47,49 @@ TemplateParser: class {
         end := template skipUntil(startTag)
         if(end == -1) {
             // No more tags to parse, rest of context is plaintext.
-            "length: %d" format(template length()) println()
-            nodes add(TextNode new(start, template length() - start))
+            length := template length() - start
+            if(length) {
+                nodes add(TextNode new(start, template length() - start))
+            }
             state = 0 // hault parsing
         }
         else {
-            nodes add(TextNode new(start, end - start))
+            length := end - start
+            if(length) {
+                nodes add(TextNode new(start, end - start))
+            }
             state = 2 // parse the tag next
         }
     }
 
     parseTag: func {
-        // skip tag opening tokens {{
-        template skip(startTag length())
+        // Read the tag from the template
+        template skip(startTag length())            // opening mustaches {{
+        tag := template readUntil(endTag)           // tag body
+        tag = tag trim()
+        template skip(endTag length())              // closing mustaches }}
 
-        tag := template readUntil(endTag)
-        "Got tag: %s" format(tag) println()
-        //TODO: pass into tag parser
+        //TODO: for now must ignore the block closing tags.
+        if(tag first() == '/') {
+            state = 1
+            return
+        }
 
-        // skip past closing tokens }}
-        template skip(endTag length())
+        // Iterate through parsers and try to find a match
+        for(p: TagParser in parsers) {
+            // If a match is found, parse the tag and push node
+            if(p matches(tag)) {
+                node := p parse(tag)
+                if(node) nodes add(node)
+                state = 1
+                return
+            }
+        }
 
-        state = 1
+        // If control reaches here, no parser could be found for this tag.
+        // Alert the users of the error.
+        "ERROR: invalid tag --> {{%s}}" format(tag) println()
+        state = 0
     }
 
     parseBlock: func {

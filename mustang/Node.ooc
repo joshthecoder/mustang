@@ -11,9 +11,7 @@ TNode: abstract class {
 TextNode: class extends TNode {
     offset, length: Int
 
-    init: func(=offset, =length) {
-        "Got text at %d length %d" format(offset, length) println()
-    }
+    init: func(=offset, =length) {}
 
     compile: func {}
 }
