@@ -3,11 +3,14 @@ import mustang/Node
 NodeWalker: abstract class {
     root: TNode
     level: Int
+    visitChildren: Bool
 
     onNode: abstract func(node: TNode)
 
-    walk: func(root: TNode) {
+    walk: func(root: TNode, visitChildren: Bool) {
         level = -1
+        this visitChildren = visitChildren
+
         visit(root)
     }
 
@@ -17,7 +20,7 @@ NodeWalker: abstract class {
 
         while(c) {
             onNode(c)
-            if(c firstChild) visit(c firstChild)
+            if(visitChildren && c firstChild) visit(c firstChild)
             c = c next
         }
 
@@ -26,6 +29,14 @@ NodeWalker: abstract class {
 }
 
 NodePrinter: class extends NodeWalker {
+    rootNode: TNode
+
+    init: func(=rootNode) {}
+
+    print: func {
+        walk(rootNode, true)
+    }
+
     onNode: func(node: TNode) {
         "%s%s" format("--> " times(level), node debug()) println()
     }

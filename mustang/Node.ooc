@@ -1,10 +1,14 @@
+import io/Writer
+import mustang/Context
+
 /**
     Base template node interface.
 */
 TNode: abstract class {
     next, firstChild: This
 
-    compile: abstract func
+    render: abstract func(context: Context, out: Writer)
+
     debug: abstract func -> String
 }
 
@@ -12,13 +16,15 @@ TNode: abstract class {
     Represents all the plain text in a template file.
 */
 TextNode: class extends TNode {
-    offset, length: Int
+    text: String
 
-    init: func(=offset, =length) {}
+    init: func(=text) {}
 
-    compile: func {}
+    render: func(context: Context, out: Writer) {
+        out write(text)
+    }
 
-    debug: func -> String { "Text: offset=%d length=%d" format(offset, length) }
+    debug: func -> String { "Text: '%s'" format(text) }
 }
 
 VariableNode: class extends TNode {
@@ -26,7 +32,10 @@ VariableNode: class extends TNode {
 
     init: func(=variableName) {}
 
-    compile: func {}
+    render: func(context: Context, out: Writer) {
+        variable := context resolve(variableName)
+        out write(variable toString())
+    }
 
     debug: func -> String { "Variable: name=%s" format(variableName) }
 }
@@ -36,7 +45,8 @@ SectionNode: class extends TNode {
 
     init: func(=name) {}
 
-    compile: func {}
+    render: func(context: Context, out: Writer) {
+    }
 
     debug: func -> String { "Section: name=%s" format(name) }
 }

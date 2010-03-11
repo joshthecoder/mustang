@@ -30,6 +30,13 @@ TemplateReader: class {
         return c
     }
 
+    range: func(start: Int, end: Int) -> String {
+        content substring(start, end)
+    }
+    range: func ~untilEnd(start: Int) -> String {
+        content substring(start)
+    }
+
     index: func -> Int { index }
 
     length: func -> Int { content length() }

@@ -72,19 +72,16 @@ TemplateParser: class {
 
         start := template index()
         end := template skipUntil(startTag)
+
         if(end == -1) {
             // No more tags to parse, rest of context is plaintext.
-            length := template length() - start
-            if(length) {
-                appendNode(TextNode new(start, template length() - start))
-            }
+            text := template range(start)
+            appendNode(TextNode new(text))
             return false
         }
-        else {
-            length := end - start
-            if(length) {
-                appendNode(TextNode new(start, end - start))
-            }
+        else if(end != start) {
+            text := template range(start, end)
+            appendNode(TextNode new(text))
         }
 
         return true
