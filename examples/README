@@ -1,0 +1,5 @@
+A bunch of example templates.
+
+All .mustache templates are copied from the mustache[1] repository.
+
+[1] http://github.com/defunkt/mustache
