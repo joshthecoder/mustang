@@ -33,8 +33,7 @@ VariableParser: class extends TagParser {
     matches: func(tag: String) -> Bool { tag first() isAlphaNumeric() }
 
     parse: func(tag: String) -> TNode {
-        "Parsing variable tag: %s" format(tag) println()
-        null
+        VariableNode new(tag)
     }
 }
 
@@ -46,10 +45,7 @@ VariableParser: class extends TagParser {
 CommentParser: class extends TagParser {
     matches: func(tag: String) -> Bool { tag first() == '!' }
 
-    parse: func(tag: String) -> TNode {
-        "Comment: %s" format(tag) println()
-        null
-    }
+    parse: func(tag: String) -> TNode { null }
 }
 
 /**
@@ -63,8 +59,7 @@ SectionParser: class extends TagParser {
     isBlock: func -> Bool { true }
 
     parse: func(tag: String) -> TNode {
-        "Section: %s" format(tag) println()
-        null
+        SectionNode new(tag)
     }
 }
 

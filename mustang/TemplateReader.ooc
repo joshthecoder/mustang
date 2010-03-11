@@ -21,7 +21,13 @@ TemplateReader: class {
     }
 
     hasNext: func -> Bool {
-        return (index + 1) < content length()
+        return index < content length()
+    }
+
+    read: func ~char -> Char {
+        c := content[index]
+        index += 1
+        return c
     }
 
     index: func -> Int { index }
