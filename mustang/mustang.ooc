@@ -1,6 +1,6 @@
 import io/File
 import structs/ArrayList
-import mustang/[TemplateParser, TemplateReader]
+import mustang/[TemplateParser, TemplateReader, Walker]
 
 main: func(args: ArrayList<String>) -> Int {
     if(args size() < 2) {
@@ -11,6 +11,9 @@ main: func(args: ArrayList<String>) -> Int {
     template := TemplateReader getReaderFromFile(File new(args[1]))
     parser := TemplateParser new(template, "{{", "}}")
 
-    parser parse()
+    root := parser parse()
+    printer := NodePrinter new(root)
+    printer walk()
+
     return 0
 }
