@@ -4,11 +4,10 @@ NodeWalker: abstract class {
     root: TNode
     level: Int
 
-    init: func(=root) { level = -1 }
-
     onNode: abstract func(node: TNode)
 
-    walk: func {
+    walk: func(root: TNode) {
+        level = -1
         visit(root)
     }
 
@@ -27,9 +26,6 @@ NodeWalker: abstract class {
 }
 
 NodePrinter: class extends NodeWalker {
-    // Need to wrap the super init here, otherwise jooc messes up!
-    init: func ~printer(.root) { super(root) }
-
     onNode: func(node: TNode) {
         "%s%s" format("--> " times(level), node debug()) println()
     }
