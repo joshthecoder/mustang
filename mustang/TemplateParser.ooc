@@ -1,29 +1,5 @@
 import structs/[List, LinkedList]
-import mustang/[TemplateReader, Node]
-
-/**
-    Used by TemplateParser for parsing tokens.
-
-    Token -> for each TagParser: matches() is true?
-    If true: TagParser parse() is called.
-*/
-TagParser: abstract class {
-    /**
-        Check if this parser wants to handle this token.
-    */
-    matches: abstract func(token: String) -> Bool
-
-    /**
-        Is this token a single statement or block of statements?
-    */
-    isBlock: func -> Bool { false }
-
-    /**
-        Parse the token text and return a Node.
-    */
-    parse: abstract func(token: String) -> BaseNode
-}
-
+import mustang/[TemplateReader, Node, TagParser]
 
 /**
     Parses the template text and returns a list of token Nodes.
@@ -40,7 +16,7 @@ TagParser: abstract class {
 */
 TemplateParser: class {
     template: TemplateReader
-    nodes: List<BaseNode>
+    nodes: List<TNode>
     startTag, endTag: String
     state: Int
 
@@ -48,8 +24,8 @@ TemplateParser: class {
         state = 1
     }
 
-    parse: func -> List<BaseNode> {
-        nodes = LinkedList<BaseNode> new()
+    parse: func -> List<TNode> {
+        nodes = LinkedList<TNode> new()
 
         while(state) {
             if(state == 1) parseText()

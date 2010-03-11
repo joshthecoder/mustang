@@ -1,14 +1,14 @@
 /**
-    Base node interface
+    Base template node interface.
 */
-BaseNode: abstract class {
+TNode: abstract class {
     compile: abstract func
 }
 
 /**
     Represents all the plain text in a template file.
 */
-TextNode: class extends BaseNode {
+TextNode: class extends TNode {
     offset, length: Int
 
     init: func(=offset, =length) {
