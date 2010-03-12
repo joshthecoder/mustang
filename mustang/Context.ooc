@@ -1,5 +1,6 @@
 import structs/[HashMap, List]
 
+
 Value: abstract class {
     typeName: abstract func -> String
     toString: abstract func -> String
@@ -26,14 +27,11 @@ ListValue: class <T> extends Value {
     list: func -> List<T> { list }
 }
 
-Context: abstract class {
-    resolve: abstract func(name: String) -> Value
-}
-
-MockContext: class extends Context {
+Context: class {
     data: HashMap<Value>
 
-    init: func(=data) {}
+    init: func ~withHashMap(=data) {}
+    init: func { data = HashMap<Value> new() }
 
     resolve: func(name: String) -> Value {
         data[name]
