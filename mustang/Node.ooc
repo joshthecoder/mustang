@@ -33,7 +33,7 @@ VariableNode: class extends TNode {
     init: func(=variableName) {}
 
     render: func(context: Context, out: Writer) {
-        variable := context resolve(variableName)
+        variable := context get(variableName)
         out write(variable toString())
     }
 
