@@ -59,7 +59,8 @@ SectionParser: class extends TagParser {
     isBlock: func -> Bool { true }
 
     parse: func(tag: String) -> TNode {
-        SectionNode new(tag)
+        variableName := tag substring(1). trim()
+        SectionNode new(variableName)
     }
 }
 

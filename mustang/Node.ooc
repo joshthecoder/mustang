@@ -1,5 +1,5 @@
 import io/Writer
-import mustang/Context
+import mustang/[Context, Renderer]
 
 /**
     Base template node interface.
@@ -34,6 +34,10 @@ VariableNode: class extends TNode {
 
     render: func(context: Context, out: Writer) {
         variable := context get(variableName)
+        if(!variable) {
+            Exception new("Variable '%s' not found in context!" format(variableName)) throw()
+        }
+
         out write(variable toString())
     }
 
@@ -41,12 +45,28 @@ VariableNode: class extends TNode {
 }
 
 SectionNode: class extends TNode {
-    name: String
+    variableName: String
 
-    init: func(=name) {}
+    init: func(=variableName) {}
 
     render: func(context: Context, out: Writer) {
+        variable := context get(variableName)
+        if(!variable) {
+            Exception new("Variable '%s' not found in context!" format(variableName)) throw()
+        }
+
+        if(variable type() == "List") {
+        }
+        else if(variable type() == "Bool") {
+            if((variable as BoolValue) isTrue()) {
+                Renderer new(this firstChild, context) render(out)
+            }
+        }
+        else {
+            //TODO: better report this error
+            Exception new("Section variable must be either list or bool!") throw()
+        }
     }
 
-    debug: func -> String { "Section: name=%s" format(name) }
+    debug: func -> String { "Section: name=%s" format(variableName) }
 }

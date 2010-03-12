@@ -22,6 +22,8 @@ BoolValue: class extends Value {
 
     type: func -> String { "Bool" }
     toString: func -> String { value toString() }
+
+    isTrue: func -> Bool { value }
 }
 
 ListValue: class <T> extends Value {
@@ -37,7 +39,7 @@ ListValue: class <T> extends Value {
 
 Context: abstract class {
     add: abstract func(name: String, value: Value)
-    get: abstract func(name: String, value: Value)
+    get: abstract func(name: String) -> Value
 
     addString: func(name: String, value: String) {
         add(name, StringValue new(value))
