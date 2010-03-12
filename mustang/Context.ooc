@@ -37,45 +37,44 @@ ListValue: class extends Value {
     list: func -> List<Value> { list }
 }
 
-ContextValue: class extends Value {
-    context: Context
+HashValue: class extends Value {
+    hash: HashMap<Value>
 
-    init: func(=context) {}
+    init: func(=hash) {}
 
-    type: func -> String { "Context" }
-    toString: func -> String { "Context" }
+    type: func -> String { "Hash" }
+    toString: func -> String { "Hash" }
 
-    context: func -> Context { context }
+    hash: func -> HashMap<Value> { hash }
+    toContext: func -> Context { Context new(hash) }
 }
 
-Context: abstract class {
-    add: abstract func(name: String, value: Value)
-    get: abstract func(name: String) -> Value
+Context: class {
+    root: HashMap<Value>
+
+    init: func ~withHashMap(=root) {}
+    init: func { root = HashMap<Value> new() }
+
+    addValue: func(name: String, value: Value) {
+        root add(name, value)
+    }
 
     addString: func(name: String, value: String) {
-        add(name, StringValue new(value))
+        root add(name, StringValue new(value))
     }
 
     addBool: func(name: String, value: Bool) {
-        add(name, BoolValue new(value))
+        root add(name, BoolValue new(value))
     }
 
-    addList: func(name: String, value: List<Value>) {
-        add(name, ListValue new(value))
-    }
-}
-
-HashContext: class extends Context {
-    data: HashMap<Value>
-
-    init: func ~withHashMap(=data) {}
-    init: func { data = HashMap<Value> new() }
-
-    add: func(name: String, value: Value) {
-        data add(name, value)
+    addList: func(name: String, list: List<Value>) {
+        root add(name, ListValue new(list))
     }
 
-    get: func(name: String) -> Value {
-        data get(name)
+    addHash: func(name: String, hash: HashMap<Value>) {
+        root add(name, HashValue new(hash))
+    }
+
+    resolve: func(expression: String) -> Value {
     }
 }
