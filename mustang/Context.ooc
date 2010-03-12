@@ -76,5 +76,14 @@ Context: class {
     }
 
     resolve: func(expression: String) -> Value {
+        offset := expression indexOf(' ')
+
+        // If just a simple root hash access, return value quickly
+        if(offset == -1) {
+            return root get(expression)
+        }
+
+        //TODO: resolve chained accesses here
+        return null
     }
 }

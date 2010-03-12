@@ -33,7 +33,7 @@ VariableNode: class extends TNode {
     init: func(=variableName) {}
 
     render: func(context: Context, out: Writer) {
-        variable := context get(variableName)
+        variable := context resolve(variableName)
         if(!variable) {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
@@ -50,7 +50,7 @@ SectionNode: class extends TNode {
     init: func(=variableName) {}
 
     render: func(context: Context, out: Writer) {
-        variable := context get(variableName)
+        variable := context resolve(variableName)
         if(!variable) {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
