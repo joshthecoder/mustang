@@ -26,15 +26,26 @@ BoolValue: class extends Value {
     isTrue: func -> Bool { value }
 }
 
-ListValue: class <T> extends Value {
-    list: List<T>
+ListValue: class extends Value {
+    list: List<Value>
 
     init: func(=list) {}
 
     type: func -> String { "List" }
     toString: func -> String { "List size=%d" format(list size()) }
 
-    list: func -> List<T> { list }
+    list: func -> List<Value> { list }
+}
+
+ContextValue: class extends Value {
+    context: Context
+
+    init: func(=context) {}
+
+    type: func -> String { "Context" }
+    toString: func -> String { "Context" }
+
+    context: func -> Context { context }
 }
 
 Context: abstract class {
@@ -49,8 +60,8 @@ Context: abstract class {
         add(name, BoolValue new(value))
     }
 
-    addList: func <T> (name: String, value: List<T>) {
-        add(name, ListValue<T> new(value))
+    addList: func(name: String, value: List<Value>) {
+        add(name, ListValue new(value))
     }
 }
 
