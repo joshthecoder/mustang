@@ -3,7 +3,6 @@ mustang(1) -- mustang template compiler
 
 ## SYNOPSIS
 
-`mustang` --compile <TEMPLATE> <VIEW>   
 `mustang` --render <TEMPLATE> <DATA>    
 `mustang` --serve <TEMPLATE> <DATA> [[HOST:]PORT]    
 `mustang` --validate <TEMPLATE> 
@@ -11,68 +10,11 @@ mustang(1) -- mustang template compiler
 ## DESCRIPTION
 
 Mustang is a template engine for the ooc programming language.
-It was inspired by Mustache templates. Mustang's syntax is fully
-compatible with Mustache. Mustang should compile mustache templates
-with no issues.
+It was inspired by Mustache templates. Mustang is a superset of the
+Mustache syntax and should compile Mustache templates with no issues.
 
-The `mustang` command is able to compile, render, or server
+The `mustang` command is used for rendering and validating
 templates.
-
-## COMPILING
-
-Compiling requires the <TEMPLATE> file to be processed and the associated
-<VIEW> class that supplies the data. A View class may look like this:
-
-    MyView: class extends View {
-        url: String
-        title: String
-        viewCount: Int
-    }
-
-A template to go with this view might look like:
-
-    <a href="{{url}}">{{name}} (viewed {{viewCount}})</a>
-
-Then compile the template with this command:
-
-    `mustang` --compile example.mustang MyView.ooc
-
-## RENDERING
-
-Rendering allows supplying data in the form of a JSON file
-which is then used to render the template.
-Here is some mock data for our template:
-
-    {
-        "url": "http://ooc-lang.org",
-        "title": ""ooc homepage",
-        "viewCount": 10000
-    }
-
-We can then render the template with the following command:
-
-    `mustang` --render example.mustang data.json > rendered.html
-
-Notice the rendered output is sent via standard out which can
-then be directed where you need it to go.
-
-## SERVE
-
-Another handy feature to use during template development is the serve option.
-This runs an embedded web server which serves the rendered template via HTTP.
-To serve the above template with our mock data execute:
-
-    `mustang` --serve example.mustang data.json
-
-You can then view this rendered template at: http://localhost:8000/
-The template will always be freshly rendered for each page request.
-This makes it very convenient to quickly preview your template with
-updates shown on the fly.
-
-## VALIDATE
-
-Checks for any syntax errors in the <TEMPLATE> file.
-Any errors found will be printed via standard out.
 
 ## OPTIONS
 

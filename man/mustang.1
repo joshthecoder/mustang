@@ -7,9 +7,6 @@
 \fBmustang\fR \-\- mustang template compiler
 .
 .SH "SYNOPSIS"
-\fBmustang\fR \-\-compile \fITEMPLATE\fR \fIVIEW\fR
-.
-.br
 \fBmustang\fR \-\-render \fITEMPLATE\fR \fIDATA\fR
 .
 .br
@@ -20,111 +17,12 @@
 .
 .SH "DESCRIPTION"
 Mustang is a template engine for the ooc programming language.
-It was inspired by Mustache templates. Mustang's syntax is fully
-compatible with Mustache. Mustang should compile mustache templates
-with no issues.
+It was inspired by Mustache templates. Mustang is a superset of the
+Mustache syntax and should compile Mustache templates with no issues.
 .
 .P
-The \fBmustang\fR command is able to compile, render, or server
+The \fBmustang\fR command is used for rendering and validating
 templates.
-.
-.SH "COMPILING"
-Compiling requires the \fITEMPLATE\fR file to be processed and the associated \fIVIEW\fR class that supplies the data. A View class may look like this:
-.
-.IP "" 4
-.
-.nf
-MyView: class extends View {
-    url: String
-    title: String
-    viewCount: Int
-}
-.
-.fi
-.
-.IP "" 0
-.
-.P
-A template to go with this view might look like:
-.
-.IP "" 4
-.
-.nf
-<a href="{{url}}">{{name}} (viewed {{viewCount}})</a>
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Then compile the template with this command:
-.
-.IP "" 4
-.
-.nf
-`mustang` \-\-compile example.mustang MyView.ooc
-.
-.fi
-.
-.IP "" 0
-.
-.SH "RENDERING"
-Rendering allows supplying data in the form of a JSON file
-which is then used to render the template.
-Here is some mock data for our template:
-.
-.IP "" 4
-.
-.nf
-{
-    "url": "http://ooc\-lang.org",
-    "title": ""ooc homepage",
-    "viewCount": 10000
-}
-.
-.fi
-.
-.IP "" 0
-.
-.P
-We can then render the template with the following command:
-.
-.IP "" 4
-.
-.nf
-`mustang` \-\-render example.mustang data.json > rendered.html
-.
-.fi
-.
-.IP "" 0
-.
-.P
-Notice the rendered output is sent via standard out which can
-then be directed where you need it to go.
-.
-.SH "SERVE"
-Another handy feature to use during template development is the serve option.
-This runs an embedded web server which serves the rendered template via HTTP.
-To serve the above template with our mock data execute:
-.
-.IP "" 4
-.
-.nf
-`mustang` \-\-serve example.mustang data.json
-.
-.fi
-.
-.IP "" 0
-.
-.P
-You can then view this rendered template at: http://localhost:8000/
-The template will always be freshly rendered for each page request.
-This makes it very convenient to quickly preview your template with
-updates shown on the fly.
-.
-.SH "VALIDATE"
-Checks for any syntax errors in the \fITEMPLATE\fR file.
-Any errors found will be printed via standard out.
 .
 .SH "OPTIONS"
 TODO: document any options here

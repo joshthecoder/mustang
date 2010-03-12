@@ -67,82 +67,18 @@
 
 <h2>SYNOPSIS</h2>
 
-<p><code>mustang</code> --compile <var>TEMPLATE</var> <var>VIEW</var> <br />
-<code>mustang</code> --render <var>TEMPLATE</var> <var>DATA</var>  <br />
+<p><code>mustang</code> --render <var>TEMPLATE</var> <var>DATA</var>  <br />
 <code>mustang</code> --serve <var>TEMPLATE</var> <var>DATA</var> [[HOST:]PORT]  <br />
 <code>mustang</code> --validate <var>TEMPLATE</var></p>
 
 <h2>DESCRIPTION</h2>
 
 <p>Mustang is a template engine for the ooc programming language.
-It was inspired by Mustache templates. Mustang's syntax is fully
-compatible with Mustache. Mustang should compile mustache templates
-with no issues.</p>
+It was inspired by Mustache templates. Mustang is a superset of the
+Mustache syntax and should compile Mustache templates with no issues.</p>
 
-<p>The <code>mustang</code> command is able to compile, render, or server
+<p>The <code>mustang</code> command is used for rendering and validating
 templates.</p>
-
-<h2>COMPILING</h2>
-
-<p>Compiling requires the <var>TEMPLATE</var> file to be processed and the associated
-<var>VIEW</var> class that supplies the data. A View class may look like this:</p>
-
-<pre><code>MyView: class extends View {
-    url: String
-    title: String
-    viewCount: Int
-}
-</code></pre>
-
-<p>A template to go with this view might look like:</p>
-
-<pre><code>&lt;a href="{{url}}"&gt;{{name}} (viewed {{viewCount}})&lt;/a&gt;
-</code></pre>
-
-<p>Then compile the template with this command:</p>
-
-<pre><code>`mustang` --compile example.mustang MyView.ooc
-</code></pre>
-
-<h2>RENDERING</h2>
-
-<p>Rendering allows supplying data in the form of a JSON file
-which is then used to render the template.
-Here is some mock data for our template:</p>
-
-<pre><code>{
-    "url": "http://ooc-lang.org",
-    "title": ""ooc homepage",
-    "viewCount": 10000
-}
-</code></pre>
-
-<p>We can then render the template with the following command:</p>
-
-<pre><code>`mustang` --render example.mustang data.json &gt; rendered.html
-</code></pre>
-
-<p>Notice the rendered output is sent via standard out which can
-then be directed where you need it to go.</p>
-
-<h2>SERVE</h2>
-
-<p>Another handy feature to use during template development is the serve option.
-This runs an embedded web server which serves the rendered template via HTTP.
-To serve the above template with our mock data execute:</p>
-
-<pre><code>`mustang` --serve example.mustang data.json
-</code></pre>
-
-<p>You can then view this rendered template at: http://localhost:8000/
-The template will always be freshly rendered for each page request.
-This makes it very convenient to quickly preview your template with
-updates shown on the fly.</p>
-
-<h2>VALIDATE</h2>
-
-<p>Checks for any syntax errors in the <var>TEMPLATE</var> file.
-Any errors found will be printed via standard out.</p>
 
 <h2>OPTIONS</h2>
 
