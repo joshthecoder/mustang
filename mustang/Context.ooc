@@ -1,4 +1,5 @@
 import structs/[HashMap, List]
+import text/StringTokenizer
 
 
 Value: abstract class {
@@ -83,7 +84,17 @@ Context: class {
             return root get(expression)
         }
 
-        //TODO: resolve chained accesses here
-        return null
+        // For complex, chained accesses, tokenize and resolve each one
+        currentHash := root
+        next: Value
+        tokenizer := StringTokenizer new(expression, ' ')
+        for(name: String in tokenizer) {
+            next = currentHash get(name)
+            if(!next || next type() != "Hash") break
+
+            currentHash = (next as HashValue) hash()
+        }
+
+        return next
     }
 }
