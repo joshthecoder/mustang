@@ -12,8 +12,8 @@ main: func(args: ArrayList<String>) -> Int {
     parser := TemplateParser new(template, "{{", "}}")
 
     root := parser parse()
-    printer := NodePrinter new()
-    printer walk(root)
+    printer := NodePrinter new(root)
+    printer print()
 
     return 0
 }
