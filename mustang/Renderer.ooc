@@ -8,19 +8,20 @@ Renderer: class extends NodeWalker {
     context: Context
     output: Writer
 
-    init: func(=rootNode, =context) {}
+    init: func(=rootNode) {}
 
     onNode: func(node: TNode) {
         node render(context, output)
     }
 
-    render: func(output: Writer) {
+    render: func(context: Context, output: Writer) {
+        this context = context
         this output = output
         walk(rootNode, false)
     }
-    render: func ~toString -> String {
+    render: func ~toString(context: Context) -> String {
         buffer := Buffer new(1000)
-        render(BufferWriter new(buffer))
+        render(context, BufferWriter new(buffer))
         return buffer toString()
     }
 }

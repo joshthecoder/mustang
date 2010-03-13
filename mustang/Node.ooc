@@ -58,12 +58,12 @@ SectionNode: class extends TNode {
         if(variable type() == "List") {
             for(item: Value in (variable as ListValue) list()) {
                 //TODO: check the type here to be sure its context, if not perform loop w/ single item context
-                Renderer new(this firstChild, (item as HashValue) toContext()) render(out)
+                Renderer new(this firstChild) render((item as HashValue) toContext(), out)
             }
         }
         else if(variable type() == "Bool") {
             if((variable as BoolValue) isTrue()) {
-                Renderer new(this firstChild, context) render(out)
+                Renderer new(this firstChild) render(context, out)
             }
         }
         else {

@@ -37,6 +37,8 @@ TemplateReader: class {
         content substring(start)
     }
 
+    reset: func { index = 0 }
+
     index: func -> Int { index }
 
     length: func -> Int { content length() }
