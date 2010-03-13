@@ -3,7 +3,7 @@ import text/StringTokenizer
 
 
 Value: abstract class {
-    type: abstract func -> String
+    type: abstract func -> Class
     toString: abstract func -> String
 }
 
@@ -12,7 +12,7 @@ StringValue: class extends Value {
 
     init: func(=value) {}
 
-    type: func -> String { "String" }
+    type: func -> Class { String }
     toString: func -> String { value }
 }
 
@@ -21,7 +21,7 @@ BoolValue: class extends Value {
 
     init: func(=value) {}
 
-    type: func -> String { "Bool" }
+    type: func -> Class { Bool }
     toString: func -> String { value toString() }
 
     isTrue: func -> Bool { value }
@@ -32,7 +32,7 @@ ListValue: class extends Value {
 
     init: func(=list) {}
 
-    type: func -> String { "List" }
+    type: func -> Class { List }
     toString: func -> String { "List size=%d" format(list size()) }
 
     list: func -> List<Value> { list }
@@ -43,7 +43,7 @@ HashValue: class extends Value {
 
     init: func(=hash) {}
 
-    type: func -> String { "Hash" }
+    type: func -> Class { HashMap }
     toString: func -> String { "Hash" }
 
     hash: func -> HashMap<Value> { hash }
@@ -90,7 +90,7 @@ Context: class {
         tokenizer := StringTokenizer new(expression, ' ')
         for(name: String in tokenizer) {
             next = currentHash get(name)
-            if(!next || next type() != "Hash") break
+            if(!next || next type() != HashMap) break
 
             currentHash = (next as HashValue) hash()
         }

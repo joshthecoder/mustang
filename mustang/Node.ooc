@@ -1,4 +1,5 @@
 import io/Writer
+import structs/[List, HashMap]
 import mustang/[Context, Renderer]
 
 /**
@@ -55,11 +56,11 @@ SectionNode: class extends TNode {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
 
-        if(variable type() == "List") {
+        if(variable type() == List) {
             itemContext: Context
 
             for(item: Value in (variable as ListValue) list()) {
-                if(item type() == "Hash") {
+                if(item type() == HashMap) {
                     itemContext = (item as HashValue) toContext()
                 }
                 else {
@@ -70,7 +71,7 @@ SectionNode: class extends TNode {
                 Renderer new(this firstChild) render(itemContext, out)
             }
         }
-        else if(variable type() == "Bool") {
+        else if(variable type() == Bool) {
             if((variable as BoolValue) isTrue()) {
                 Renderer new(this firstChild) render(context, out)
             }
