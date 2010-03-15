@@ -1,6 +1,6 @@
 import io/Writer
 import structs/[List, HashMap]
-import mustang/[Context, Renderer]
+import mustang/[Context, Value, Renderer]
 
 /**
     Base template node interface.
@@ -39,7 +39,7 @@ VariableNode: class extends TNode {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
 
-        out write(variable toString())
+        out write(variable emit())
     }
 
     debug: func -> String { "Variable: name=%s" format(variableName) }
@@ -56,12 +56,12 @@ SectionNode: class extends TNode {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
 
-        if(variable type() == List) {
+        if(variable instanceOf(ListValue)) {
             itemContext: Context
 
             for(item: Value in (variable as ListValue) list()) {
-                if(item type() == HashMap) {
-                    itemContext = (item as HashValue) toContext()
+                if(item instanceOf(HashValue)) {
+                    itemContext = Context new(item as HashValue)
                 }
                 else {
                     itemContext = Context new()
@@ -71,7 +71,7 @@ SectionNode: class extends TNode {
                 Renderer new(this firstChild) render(itemContext, out)
             }
         }
-        else if(variable type() == Bool) {
+        else if(variable instanceOf(BoolValue)) {
             if((variable as BoolValue) isTrue()) {
                 Renderer new(this firstChild) render(context, out)
             }
