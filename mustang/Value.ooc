@@ -1,4 +1,4 @@
-import structs/[HashMap, List]
+import structs/[HashMap, List, LinkedList]
 
 
 Value: abstract class {
@@ -30,10 +30,31 @@ BoolValue: class extends Value {
 ListValue: class extends Value {
     list: List<Value>
 
-    init: func(=list) {}
+    init: func ~withList(=list) {}
+    init: func ~empty { list = LinkedList<Value> new() }
 
     emit: func -> String {
         "List(size=%d)" format(list size())
+    }
+
+    appendValue: func(value: Value) {
+        list add(value)
+    }
+
+    appendString: func(value: String) {
+        list add(StringValue new(value))
+    }
+
+    appendBool: func(value: Bool) {
+        list add(BoolValue new(value))
+    }
+
+    appendList: func(list: List<Value>) {
+        list add(ListValue new(list))
+    }
+
+    appendHashMap: func(hash: HashMap<Value>) {
+        list add(HashValue new(hash))
     }
 
     list: func -> List<Value> { list }
@@ -47,8 +68,24 @@ HashValue: class extends Value {
 
     emit: func -> String { "Hash" }
 
-    addValue: func(name: String, value: Value) {
+    setValue: func(name: String, value: Value) {
         hash add(name, value)
+    }
+
+    setString: func(name: String, value: String) {
+        addValue(name, StringValue new(value))
+    }
+
+    setBool: func(name: String, value: Bool) {
+        addValue(name, BoolValue new(value))
+    }
+
+    setList: func(name: String, list: List<Value>) {
+        addValue(name, ListValue new(list))
+    }
+
+    setHashMap: func(name: String, hash: HashMap<Value>) {
+        addValue(name, HashValue new(hash))
     }
 
     getValue: func(name: String) -> Value {
