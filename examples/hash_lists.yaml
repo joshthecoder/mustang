@@ -19,5 +19,4 @@ employees:
         position: Sales Associate
         salary: 38,000
         vacationDaysLeft: 4
-...
-        
+---

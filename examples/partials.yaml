@@ -1,0 +1,17 @@
+---
+forecasts:
+    -   dayOfWeek: Monday
+        conditions: Cloudy
+        highTemp: 65
+        lowTemp: 50
+
+    -   dayOfWeek: Tuesday
+        conditions: Sunny
+        highTemp: 78
+        lowTemp: 58
+
+    -   dayOfWeek: Wednesday
+        conditions: Rain
+        highTemp: 58
+        lowTemp: 48
+---

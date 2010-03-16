@@ -64,6 +64,21 @@ SectionParser: class extends TagParser {
     }
 }
 
+/**
+    Partial tag parser.
+
+    Syntax: {{>user}}
+*/
+PartialParser: class extends TagParser {
+    matches: func(tag: String) -> Bool { tag first() == '>' }
+
+    parse: func(tag: String) -> TNode {
+        "Parsed parital tag!" println()
+        null
+    }
+}
+
 loadBuiltinParsers: func(parsers: List<TagParser>) {
-    parsers add(VariableParser new()) .add(CommentParser new()) .add(SectionParser new())
+    parsers add(VariableParser new()). add(CommentParser new()).
+            add(SectionParser new()). add(PartialParser new())
 }
