@@ -1,4 +1,5 @@
 ---
-heading: Animals
+header: Animals
 items: ["Dog", "Bear", "Cow", "Pig", "Bird"]
+footer: The End
 ...

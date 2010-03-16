@@ -1,0 +1,23 @@
+---
+timeGenerated: 2010-03-16 16:00:00
+
+employees:
+    -   name: Matt
+        dob: 01/22/78
+        position: Sales Manager
+        salary: 70,000
+        vacationDaysLeft: 5
+
+    -   name: Bill
+        dob: 10/11/80
+        position: Senior Database Admin
+        salary: 75,000
+        vacationDaysLeft: 10
+
+    -   name: Jane
+        dob: 02/01/87
+        position: Sales Associate
+        salary: 38,000
+        vacationDaysLeft: 4
+...
+        

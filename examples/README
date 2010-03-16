@@ -1,0 +1,12 @@
+Mustang Template Examples
+=========================
+Here you will find a assortment of examples.
+
+Templates ending with ".mustache" are fully compatible
+with Mustache[1] syntax.
+
+Templates ending with ".mustang" use superset features
+of Mustang and will are NOT compatible with Mustache.
+
+
+[1] http://defunkt.github.com/mustache
