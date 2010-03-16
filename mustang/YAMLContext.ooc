@@ -37,7 +37,7 @@ YAMLContext: class extends Context {
             case ScalarNode => scalarToValue(node as ScalarNode)
             case SequenceNode => sequenceToListValue(node as SequenceNode)
             case MappingNode => mappingToHashValue(node as MappingNode)
-            case => Exception new("Unknown node type!") throw(); null
+            case => StringValue new(node toString())
         }
     }
 
