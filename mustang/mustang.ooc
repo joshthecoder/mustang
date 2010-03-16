@@ -1,19 +1,16 @@
 import io/File
 import structs/ArrayList
-import mustang/[TemplateParser, TemplateReader, Walker]
+import mustang/[Template, YAMLContext]
 
 main: func(args: ArrayList<String>) -> Int {
-    if(args size() < 2) {
-        "Usage: mustang <TEMPLATE>" println()
+    if(args size() < 3) {
+        "Usage: mustang <TEMPLATE> <YAML>" println()
         return 1
     }
 
-    template := TemplateReader getReaderFromFile(File new(args[1]))
-    parser := TemplateParser new(template, "{{", "}}")
-
-    root := parser parse()
-    printer := NodePrinter new(root)
-    printer print()
+    context := YAMLContext loadFromFile(args[2])
+    template := Template loadFromFile(args[1])
+    template render(context) println()
 
     return 0
 }

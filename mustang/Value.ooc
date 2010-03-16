@@ -73,19 +73,19 @@ HashValue: class extends Value {
     }
 
     setString: func(name: String, value: String) {
-        addValue(name, StringValue new(value))
+        setValue(name, StringValue new(value))
     }
 
     setBool: func(name: String, value: Bool) {
-        addValue(name, BoolValue new(value))
+        setValue(name, BoolValue new(value))
     }
 
     setList: func(name: String, list: List<Value>) {
-        addValue(name, ListValue new(list))
+        setValue(name, ListValue new(list))
     }
 
     setHashMap: func(name: String, hash: HashMap<Value>) {
-        addValue(name, HashValue new(hash))
+        setValue(name, HashValue new(hash))
     }
 
     getValue: func(name: String) -> Value {

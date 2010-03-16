@@ -65,7 +65,7 @@ SectionNode: class extends TNode {
                 }
                 else {
                     itemContext = Context new()
-                    itemContext addValue("item", item)
+                    itemContext setValue("item", item)
                 }
 
                 Renderer new(this firstChild) render(itemContext, out)
