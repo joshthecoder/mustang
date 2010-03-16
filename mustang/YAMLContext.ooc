@@ -34,11 +34,24 @@ YAMLContext: class extends Context {
 
     nodeToValue: static func(node: DocumentNode) -> Value {
         match node class {
-            case ScalarNode => StringValue new((node as ScalarNode) value)
+            case ScalarNode => scalarToValue(node as ScalarNode)
             case SequenceNode => sequenceToListValue(node as SequenceNode)
             case MappingNode => mappingToHashValue(node as MappingNode)
             case => Exception new("Unknown node type!") throw(); null
         }
+    }
+
+    scalarToValue: static func(scalar: ScalarNode) -> Value {
+        normalizedValue := scalar value trim() toLower()
+
+        //TODO: boolean detection should be moved into ooc-yaml (datatype detection)
+        match normalizedValue {
+            case "true" => BoolValue new(true)
+            case "yes" => BoolValue new(true)
+            case "false" => BoolValue new(false)
+            case "no" => BoolValue new(false)
+            case => StringValue new(scalar value)
+         }
     }
 
     sequenceToListValue: static func(seq: SequenceNode) -> ListValue {
