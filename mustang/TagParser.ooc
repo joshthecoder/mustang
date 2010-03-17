@@ -1,5 +1,5 @@
 import structs/List
-import mustang/Node
+import mustang/[Node, Template]
 
 /**
     Used by TemplateParser for parsing tags.
@@ -59,7 +59,7 @@ SectionParser: class extends TagParser {
     isBlock: func -> Bool { true }
 
     parse: func(tag: String) -> TNode {
-        variableName := tag substring(1). trim()
+        variableName := tag substring(1) trim()
         SectionNode new(variableName)
     }
 }
@@ -73,8 +73,11 @@ PartialParser: class extends TagParser {
     matches: func(tag: String) -> Bool { tag first() == '>' }
 
     parse: func(tag: String) -> TNode {
-        "Parsed parital tag!" println()
-        null
+        //TODO: better template path lookups
+        templateName := tag substring(1) trim()
+        template := Template loadFromFile("%s.mustache" format(templateName))
+
+        PartialNode new(template)
     }
 }
 

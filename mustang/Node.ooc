@@ -1,6 +1,6 @@
 import io/Writer
 import structs/[List, HashMap]
-import mustang/[Context, Value, Renderer]
+import mustang/[Context, Value, Renderer, Template]
 
 /**
     Base template node interface.
@@ -83,4 +83,16 @@ SectionNode: class extends TNode {
     }
 
     debug: func -> String { "Section: name=%s" format(variableName) }
+}
+
+PartialNode: class extends TNode {
+    partialTemplate: Template
+
+    init: func(=partialTemplate) {}
+
+    render: func(context: Context, out: Writer) {
+        partialTemplate render(context, out)
+    }
+
+    debug: func -> String { "Partial" }
 }

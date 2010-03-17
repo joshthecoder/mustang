@@ -12,6 +12,10 @@ TemplateReader: class {
         return new(buffer)
     }
 
+    getReaderFromPath: static func(path: String) -> This {
+        getReaderFromFile(File new(path))
+    }
+
     init: func(=content) {
         index = 0
     }
