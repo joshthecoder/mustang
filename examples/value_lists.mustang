@@ -1,5 +1,7 @@
----
-header: Animals
-items: ["Dog", "Bear", "Cow", "Pig", "Bird"]
-footer: The End
-...
+{{header}}
+------------
+{{# items}}
+- {{item}}
+{{/ items}}
+
+{{footer}}
