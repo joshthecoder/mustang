@@ -1,9 +1,11 @@
 Mustang
 =======
 A template engine for the ooc programming language.
-Will be compatible with Mustache and CTemplate syntax.
-Also will support the use of custom tags.
+Mustang is a superset of the Mustache[1] syntax and is
+fully backwards compatible with existing Mustache templates.
 
 
 Author: Joshua Roesslein
 License: BSD
+
+[1] http://defunkt.github.com/mustache/
