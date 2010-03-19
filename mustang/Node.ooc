@@ -7,6 +7,14 @@ import mustang/[Context, Value, Renderer, Template, Escape]
 */
 TNode: abstract class {
     next, firstChild: This
+    childrenRenderer: Renderer
+
+    renderChildren: func(context: Context, out: Writer) {
+        if(!childrenRenderer) {
+            childrenRenderer = Renderer new(firstChild)
+        }
+        childrenRenderer render(context, out)
+    }
 
     render: abstract func(context: Context, out: Writer)
 
@@ -78,12 +86,12 @@ SectionNode: class extends TNode {
                     itemContext setValue("item", item)
                 }
 
-                Renderer new(this firstChild) render(itemContext, out)
+                renderChildren(itemContext, out)
             }
         }
         else if(variable instanceOf(BoolValue)) {
             if((variable as BoolValue) isTrue()) {
-                Renderer new(this firstChild) render(context, out)
+                renderChildren(context, out)
             }
         }
         else {
