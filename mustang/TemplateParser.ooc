@@ -1,5 +1,8 @@
+import mustang/[Node, TagParser]
+
+import io/[File, FileReader]
 import structs/[Stack, List, LinkedList]
-import mustang/[TemplateReader, Node, TagParser]
+
 
 /**
     Parses the template text and returns a list of token Nodes.
@@ -15,15 +18,26 @@ import mustang/[TemplateReader, Node, TagParser]
     to the NodeList returned at the end of parsing.
 */
 TemplateParser: class {
-    template: TemplateReader
+    templateText: String
+    index: Int
+
     startTag, endTag: String
     parsers: LinkedList<TagParser>
+
     firstNode, currentNode: TNode
     nodeStack: Stack<TNode>
-    currentBlockName: String
     running: Bool
 
-    init: func(=template, =startTag, =endTag) {
+    getParserFromFile: static func(file: File) -> This {
+        size := file size()
+        buffer: String = gc_malloc(size + 1)
+        FileReader new(file) read(buffer, 0, size)
+        buffer[size] = '\0';
+        return new(buffer, "{{", "}}")  //TODO: un-hardcode
+    }
+
+    init: func(=templateText, =startTag, =endTag) {
+        index = 0
         parsers = LinkedList<TagParser> new()
         nodeStack = Stack<TNode> new()
 
@@ -65,34 +79,38 @@ TemplateParser: class {
     }
 
     parseText: func -> Bool {
-        if(!template hasNext()) {
+        if(index >= templateText length()) {
             // End of template, stop parsing
             return false
         }
 
-        start := template index()
-        end := template skipUntil(startTag)
+        // Find the start of the next tag
+        indexOfNextTag := templateText indexOf(startTag, index)
 
-        if(end == -1) {
+        if(indexOfNextTag == -1) {
             // No more tags to parse, rest of context is plaintext.
-            text := template range(start)
+            text := templateText substring(index)
             appendNode(TextNode new(text))
             return false
         }
-        else if(end != start) {
-            text := template range(start, end)
+        else if(indexOfNextTag != index) {
+            text := templateText substring(index, indexOfNextTag)
             appendNode(TextNode new(text))
         }
+
+        index = indexOfNextTag
 
         return true
     }
 
     parseTag: func -> Bool {
         // Read the tag from the template
-        template skip(startTag length())            // opening mustaches {{
-        tag := template readUntil(endTag)           // tag body
-        tag = tag trim()
-        template skip(endTag length())              // closing mustaches }}
+        //TODO: probably best we do this in a regex.
+        // as of now triple mustaches don't parse right.
+        index += startTag length()  // skip open tag
+        indexOfEndTag := templateText indexOf(endTag, index)  // get index of end tag
+        tag := templateText substring(index, indexOfEndTag) trim()  // substring out the tag content
+        index = indexOfEndTag + endTag length()  // advance past end tag
 
         // End of tag block
         if(tag first() == '/') {

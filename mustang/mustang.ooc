@@ -18,7 +18,7 @@ main: func(args: ArrayList<String>) -> Int {
     }
 
     context := YAMLContext loadFromFile(yamlFile)
-    template := Template loadFromFile(templateFile)
+    template := Template loadFromPath(templateFile)
     template render(context) println()
 
     return 0

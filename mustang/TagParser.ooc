@@ -87,7 +87,7 @@ PartialParser: class extends TagParser {
     parse: func(tag: String) -> TNode {
         //TODO: better template path lookups
         templateName := tag substring(1) trim()
-        template := Template loadFromFile("%s.mustache" format(templateName))
+        template := Template loadFromPath("%s.mustache" format(templateName))
 
         PartialNode new(template)
     }
