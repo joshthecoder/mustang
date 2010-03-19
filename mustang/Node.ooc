@@ -1,6 +1,6 @@
 import io/Writer
 import structs/[List, HashMap]
-import mustang/[Context, Value, Renderer, Template]
+import mustang/[Context, Value, Renderer, Template, Escape]
 
 /**
     Base template node interface.
@@ -30,16 +30,26 @@ TextNode: class extends TNode {
 
 VariableNode: class extends TNode {
     variableName: String
+    escape: Bool
 
-    init: func(=variableName) {}
+    init: func(=variableName, =escape) {}
 
     render: func(context: Context, out: Writer) {
+        // Perform variable lookup in context
         variable := context resolve(variableName)
         if(!variable) {
             Exception new("Variable '%s' not found in context!" format(variableName)) throw()
         }
 
-        out write(variable emit())
+        // Convert variable to text format
+        variableText := variable emit()
+        if(escape) {
+            // Escape any HTML in the text
+            variableText = variableText escapeHTML()
+        }
+
+        // Write variable text to output stream
+        out write(variableText)
     }
 
     debug: func -> String { "Variable: name=%s" format(variableName) }

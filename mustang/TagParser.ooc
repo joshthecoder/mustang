@@ -27,13 +27,25 @@ TagParser: abstract class {
 /**
     Variable tag parser.
 
-    Syntax: {{variableName}}
+    Syntax: {{variableName}} (auto escaped)
+            {{&variableName}} or {{{variableName}}} (unescaped)
 */
 VariableParser: class extends TagParser {
-    matches: func(tag: String) -> Bool { tag first() isAlphaNumeric() }
+    matches: func(tag: String) -> Bool {
+        first := tag first()
+        first isAlphaNumeric() || first == '&'
+    }
 
     parse: func(tag: String) -> TNode {
-        VariableNode new(tag)
+        //TODO: support triple mustache escapes also
+
+        if(tag first() == '&') {
+            // Do NOT escape variable when unescape tag used
+            return VariableNode new(tag substring(1) trimLeft(), false)
+        }
+        else {
+            return VariableNode new(tag, true)
+        }
     }
 }
 
