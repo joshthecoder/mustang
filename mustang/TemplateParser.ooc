@@ -115,6 +115,10 @@ TemplateParser: class {
         // End of tag block
         if(tag first() == '/') {
             endBlock()
+            if(templateText charAt(index) == '\n') {
+                // Skip any newline after the ending block tag
+                index += 1
+            }
             return true
         }
 
@@ -124,8 +128,16 @@ TemplateParser: class {
                 node := p parse(tag)
                 if(node) {
                     appendNode(node)
-                    if(p isBlock()) startBlock()
                 }
+
+                if(p isBlock()) {
+                    startBlock()
+                    if(templateText charAt(index) == '\n') {
+                        // Skip any newline that comes after a block start tag
+                        index += 1
+                    }
+                }
+
                 return true
             }
         }
