@@ -1,9 +1,9 @@
 import io/Writer
 import text/Buffer
-import mustang/[Node, Walker, Context]
+import mustang/[Node, Visitor, Context]
 
 
-Renderer: class extends NodeWalker {
+Renderer: class extends Visitor {
     rootNode: TNode
     context: Context
     output: Writer
@@ -17,7 +17,7 @@ Renderer: class extends NodeWalker {
     render: func(context: Context, output: Writer) {
         this context = context
         this output = output
-        walk(rootNode, false)
+        run(rootNode, false)
     }
     render: func ~toString(context: Context) -> String {
         buffer := Buffer new(1000)
