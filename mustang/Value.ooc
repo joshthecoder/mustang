@@ -53,7 +53,7 @@ ListValue: class extends Value {
         list add(ListValue new(list))
     }
 
-    appendHashMap: func(hash: HashMap<Value>) {
+    appendHashMap: func(hash: HashMap<String, Value>) {
         list add(HashValue new(hash))
     }
 
@@ -61,10 +61,10 @@ ListValue: class extends Value {
 }
 
 HashValue: class extends Value {
-    hash: HashMap<Value>
+    hash: HashMap<String, Value>
 
     init: func ~fromHashMap(=hash) {}
-    init: func ~empty { this(HashMap<Value> new()) }
+    init: func ~empty { this(HashMap<String, Value> new()) }
 
     emit: func -> String { "Hash" }
 
@@ -84,7 +84,7 @@ HashValue: class extends Value {
         setValue(name, ListValue new(list))
     }
 
-    setHashMap: func(name: String, hash: HashMap<Value>) {
+    setHashMap: func(name: String, hash: HashMap<String, Value>) {
         setValue(name, HashValue new(hash))
     }
 
@@ -92,5 +92,5 @@ HashValue: class extends Value {
         hash get(name)
     }
 
-    hash: func -> HashMap<Value> { hash }
+    hash: func -> HashMap<String, Value> { hash }
 }

@@ -2,6 +2,8 @@ import mustang/[Node, TagParser]
 
 import io/[File, FileReader]
 import structs/[Stack, List, LinkedList]
+import text/Regexp
+import text/Buffer
 
 
 /**
@@ -19,14 +21,19 @@ import structs/[Stack, List, LinkedList]
 */
 TemplateParser: class {
     templateText: String
-    index: Int
+
+    state: Int
+    index, currentLine, currentColumn: Int
+    buffer: Buffer
+    nextChar: Char
+    skipChar: Bool
 
     startTag, endTag: String
+    tagRegex: Regexp
     parsers: LinkedList<TagParser>
 
     firstNode, currentNode: TNode
     nodeStack: Stack<TNode>
-    running: Bool
 
     getParserFromFile: static func(file: File) -> This {
         size := file size()
@@ -37,9 +44,10 @@ TemplateParser: class {
     }
 
     init: func(=templateText, =startTag, =endTag) {
-        index = 0
+        buffer = Buffer new(1024)
         parsers = LinkedList<TagParser> new()
         nodeStack = Stack<TNode> new()
+        tagRegex = Regexp compile("^%s.+%s$" format(startTag, endTag), RegexpOption DOTALL)
 
         // load builtin parsers
         loadBuiltinParsers(parsers)
@@ -68,83 +76,109 @@ TemplateParser: class {
     }
 
     parse: func -> TNode {
-        running = true
+        state = ParserState PARSE_TEXT
+        index = 0; currentLine = 1; currentColumn = 0
+        buffer size = 0
+        currentNode = null
+        skipChar = false
 
-        while(true) {
-            if(!parseText()) break
-            if(!parseTag()) break
+        // Parser state machine
+        while(state != ParserState STOP) {
+            nextChar = templateText charAt(index)
+
+            if(state == ParserState PARSE_TEXT) state = parseText()
+            else if(state == ParserState PARSE_TAG) state = parseTag()
+            else Exception new("Invalid parser state: %d" format(state)) throw()
+
+            if(nextChar == '\0') {
+                // End of template, stop parsing!
+                break
+            }
+            else if(nextChar == '\n') {
+                // Increment line count and reset column
+                currentLine += 1
+                currentColumn = 0
+            }
+            else {
+                currentColumn += 1
+            }
+
+            if(!skipChar) buffer append(nextChar)
+            else skipChar = false
+            index += 1
         }
 
         return firstNode
     }
 
-    parseText: func -> Bool {
-        if(index >= templateText length()) {
-            // End of template, stop parsing
-            return false
+    parseText: func -> Int {
+        // If at the start of a tag or end of template,
+        // create a new TextNode to store the buffered text.
+        if(nextChar == '\0' || templateText compare(startTag, index)) {
+            if(buffer size) {
+                appendNode(TextNode new(buffer toString() clone()))
+                buffer size = 0
+            }
+            return ParserState PARSE_TAG
         }
 
-        // Find the start of the next tag
-        indexOfNextTag := templateText indexOf(startTag, index)
-
-        if(indexOfNextTag == -1) {
-            // No more tags to parse, rest of context is plaintext.
-            text := templateText substring(index)
-            appendNode(TextNode new(text))
-            return false
-        }
-        else if(indexOfNextTag != index) {
-            text := templateText substring(index, indexOfNextTag)
-            appendNode(TextNode new(text))
-        }
-
-        index = indexOfNextTag
-
-        return true
+        return ParserState PARSE_TEXT
     }
 
-    parseTag: func -> Bool {
-        // Read the tag from the template
-        //TODO: probably best we do this in a regex.
-        // as of now triple mustaches don't parse right.
-        index += startTag length()  // skip open tag
-        indexOfEndTag := templateText indexOf(endTag, index)  // get index of end tag
-        tag := templateText substring(index, indexOfEndTag) trim()  // substring out the tag content
-        index = indexOfEndTag + endTag length()  // advance past end tag
+    parseTag: func -> Int {
+        if(tagRegex matches(buffer toString())) {
+            tag := buffer toString()
 
-        // End of tag block
-        if(tag first() == '/') {
-            endBlock()
-            if(templateText charAt(index) == '\n') {
-                // Skip any newline after the ending block tag
-                index += 1
-            }
-            return true
-        }
+            // Strip off start and end mustaches plus whitespace
+            tag = tag substring(startTag length(), tag length() - endTag length()) trim()
+            buffer size = 0
 
-        // Iterate through parsers and try to find a match
-        for(p: TagParser in parsers) {
-            if(p matches(tag)) {
-                node := p parse(tag)
-                if(node) {
-                    appendNode(node)
+            if(tag first() == '/') {
+                // Block end tag
+                endBlock()
+                if(nextChar == '\n') {
+                    // Skip any newline after the block tag.
+                    skipChar = true
                 }
 
-                if(p isBlock()) {
-                    startBlock()
-                    if(templateText charAt(index) == '\n') {
-                        // Skip any newline that comes after a block start tag
-                        index += 1
+                return ParserState PARSE_TEXT
+            }
+            else {
+                // Find a parser for the tag and generate node
+                for(p: TagParser in parsers) {
+                    if(p matches(tag)) {
+                        node := p parse(tag)
+                        if(node) {
+                            appendNode(node)
+                        }
+
+                        if(p isBlock()) {
+                            startBlock()
+                            if(nextChar == '\n') {
+                                // Skip any newlines after a block tag.
+                                skipChar = true
+                            }
+                        }
+
+                        return ParserState PARSE_TEXT
                     }
                 }
 
-                return true
+                Exception new("Invald tag: %s" format(tag)) throw()
             }
         }
 
-        // If control reaches here, no parser could be found for this tag.
-        // Alert the users of the error.
-        "ERROR: invalid tag --> {{%s}}" format(tag) println()
-        return false
+        else if(nextChar == '\0') {
+            Exception new("Opps, looks like you have an incomplete tag at the end of the file!") throw()
+        }
+
+        return ParserState PARSE_TAG
     }
+}
+
+ParserState: class {
+    STOP: static Int = 1
+    PARSE_TEXT: static Int = 2
+    START_PARSE_TAG: static Int = 3
+    PARSE_TAG: static Int = 4
 }

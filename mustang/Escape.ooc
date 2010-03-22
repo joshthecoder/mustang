@@ -12,7 +12,7 @@ String: cover from Char* {
         escaped := Buffer new(this length() + 128)
 
         for(c: Char in this) {
-            e := match c {
+            e: String = match c {
                 case '<' => "&lt;"
                 case '>' => "&gt;"
                 case '&' => "&amp;"
@@ -21,7 +21,7 @@ String: cover from Char* {
                 case =>
                     escaped append(c)
                     continue
-                    null
+                    "null"
             }
             escaped append(e)
         }
