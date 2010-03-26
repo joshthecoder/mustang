@@ -1,5 +1,5 @@
 import io/[Writer, File]
-import mustang/[Context, TemplateParser, Renderer]
+import mustang/[Context, Parser, Renderer]
 
 Template: class {
     renderer: Renderer
