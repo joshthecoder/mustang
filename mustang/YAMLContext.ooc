@@ -45,13 +45,14 @@ YAMLContext: class extends Context {
         normalizedValue := scalar value trim() toLower()
 
         //TODO: boolean detection should be moved into ooc-yaml (datatype detection)
-        match normalizedValue {
+        v: Value = match normalizedValue {
             case "true" => BoolValue new(true)
             case "yes" => BoolValue new(true)
             case "false" => BoolValue new(false)
             case "no" => BoolValue new(false)
             case => StringValue new(scalar value)
          }
+        return v
     }
 
     sequenceToListValue: static func(seq: SequenceNode) -> ListValue {
