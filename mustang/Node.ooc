@@ -104,12 +104,12 @@ SectionNode: class extends TNode {
 }
 
 PartialNode: class extends TNode {
-    partialTemplate: Template
+    partial: Renderer
 
-    init: func(=partialTemplate) {}
+    init: func(=partial) {}
 
     render: func(context: Context, out: Writer) {
-        partialTemplate render(context, out)
+        partial render(context, out)
     }
 
     debug: func -> String { "Partial" }
