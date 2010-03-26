@@ -90,17 +90,16 @@ TemplateParser: class {
 
             // Find tag ending index
             tagEndIndex := templateText indexOf(closeTag, tagBodyIndex)
-            if(tagType == '{') {
-                // the ending index will be off by 1 if this is a
-                // triplestache tag.
-                tagEndIndex += 1
-            }
 
             // Extract the tag body content {{...body...}}
             tagBody := templateText substring(tagBodyIndex, tagEndIndex) trim()
 
             // Advance marker past end of tag
             marker = tagEndIndex + closeTagLength
+            if(tagType == '{') {
+                // Be sure to skip past extra } with triplestaches
+                marker += 1
+            }
 
             // Parse the tag and generate a node
             node: TNode = match tagType {
