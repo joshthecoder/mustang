@@ -65,6 +65,8 @@ TemplateParser: class {
         closeTagLength := closeTag length()
 
         while(marker < templateLength) {
+            if(parseError) return null
+
             // Find index of next tag
             tagStartIndex := templateText indexOf(openTag, marker)
             if(tagStartIndex == -1) {

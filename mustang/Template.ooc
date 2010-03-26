@@ -1,23 +1,28 @@
-import io/[Writer, File]
-import mustang/[Context, Parser, Renderer]
+import io/Writer
+import mustang/[Context, Loader, Parser, Renderer]
 
-Template: class {
-    renderer: Renderer
+Template: class extends Context {
+    defaultLoader := static TemplateLoader new()
 
-    loadFromPath: static func(path: String) -> This {
-        new(TemplateParser getParserFromFile(File new(path)))
+    templateName: String
+    templateLoader: TemplateLoader
+    templateRenderer: Renderer
+
+    getRenderer: func -> Renderer {
+        if(!templateRenderer) {
+            if(!templateName) templateName = class name toLower()
+            if(templateLoader) templateRenderer = templateLoader load(templateName)
+            else templateRenderer = This defaultLoader load(templateName)
+        }
+
+        return templateRenderer
     }
 
-    init: func(parser: TemplateParser) {
-        rootNode := parser parse()
-        renderer = Renderer new(rootNode)
+    render: func(out: Writer) {
+        getRenderer() render(this, out)
     }
 
-    render: func(context: Context, out: Writer) {
-        renderer render(context, out)
-    }
-
-    render: func ~toString(context: Context) -> String {
-        renderer render(context)
+    render: func ~string -> String {
+        getRenderer() render(this)
     }
 }

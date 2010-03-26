@@ -20,6 +20,13 @@ TemplateLoader: class {
         paths add(searchPath)
         this(paths)
     }
+    init: func ~useCwd {
+        this(File getCwd())
+    }
+
+    addPath: func(path: String) {
+        searchPaths add(path)
+    }
 
     load: func(name: String) -> Renderer {
         // First check if this template is in our cache

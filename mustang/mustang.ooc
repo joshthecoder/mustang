@@ -1,6 +1,6 @@
 import io/File
 import structs/ArrayList
-import mustang/[Template, YAMLContext]
+import mustang/[Parser, Renderer, YAMLContext]
 
 main: func(args: ArrayList<String>) -> Int {
     if(args size() < 2) {
@@ -17,9 +17,14 @@ main: func(args: ArrayList<String>) -> Int {
         yamlFile = args[2]
     }
 
-    context := YAMLContext loadFromFile(yamlFile)
-    template := Template loadFromPath(templateFile)
-    template render(context) println()
+    parser := TemplateParser getParserFromFile(File new(templateFile))
+    rootNode := parser parse()
+    if(!rootNode) {
+        "[ERROR] %s" format(parser lastErrorMsg) println()
+        return 1
+    }
 
+    context := YAMLContext loadFromFile(yamlFile)
+    Renderer new(rootNode) render(context) println()
     return 0
 }
