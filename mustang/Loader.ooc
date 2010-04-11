@@ -18,10 +18,10 @@ TemplateLoader: class {
     init: func ~singlePath(searchPath: String) {
         paths := LinkedList<String> new()
         paths add(searchPath)
-        this(paths)
+        init(paths)
     }
     init: func ~useCwd {
-        this(File getCwd())
+        init(File getCwd())
     }
 
     addPath: func(path: String) {

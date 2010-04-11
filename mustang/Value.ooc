@@ -64,7 +64,7 @@ HashValue: class extends Value {
     hash: HashMap<String, Value>
 
     init: func ~fromHashMap(=hash) {}
-    init: func ~empty { this(HashMap<String, Value> new()) }
+    init: func ~empty { init(HashMap<String, Value> new()) }
 
     emit: func -> String { "Hash" }
 
