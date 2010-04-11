@@ -33,7 +33,9 @@ YAMLContext: class extends Context {
     }
 
     nodeToValue: static func(node: DocumentNode) -> Value {
-        match node class {
+        nodeType := node class
+
+        match nodeType {
             case ScalarNode => scalarToValue(node as ScalarNode)
             case SequenceNode => sequenceToListValue(node as SequenceNode)
             case MappingNode => mappingToHashValue(node as MappingNode)

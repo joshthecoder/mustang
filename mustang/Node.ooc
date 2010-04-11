@@ -53,7 +53,7 @@ VariableNode: class extends TNode {
         variableText := variable emit()
         if(escape) {
             // Escape any HTML in the text
-            variableText = variableText escapeHTML()
+            variableText = escapeHTML(variableText)
         }
 
         // Write variable text to output stream
