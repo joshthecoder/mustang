@@ -2,7 +2,7 @@ OOC?=ooc
 
 all: mustang/*.ooc
 	mkdir -p bin
-	${OOC} mustang/mustang.ooc -o=bin/mustang
+	${OOC} ${OOC_FLAGS} mustang/mustang.ooc -o=bin/mustang
 
 clean:
 	rm -rf bin
