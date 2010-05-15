@@ -31,7 +31,7 @@ NodeWalker: abstract class {
 NodePrinter: class extends NodeWalker {
     rootNode: TNode
 
-    init: func(=rootNode) {}
+    init: func ~printer (=rootNode) {}
 
     print: func {
         walk(rootNode, true)

@@ -22,7 +22,7 @@ YAMLContext: class extends Context {
         This loadFromFile(File new(path))
     }
 
-    init: func(parser: YAMLParser) {
+    init: func ~yaml (parser: YAMLParser) {
         document := parser parseDocument()
         rootValue := nodeToValue(document getRootNode())
         if(rootValue class != HashValue) {

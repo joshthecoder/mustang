@@ -1,4 +1,4 @@
-OOC?=ooc
+OOC?=rock
 
 all: mustang/*.ooc
 	mkdir -p bin

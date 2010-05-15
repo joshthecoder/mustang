@@ -8,7 +8,7 @@ Renderer: class extends NodeWalker {
     context: Context
     output: Writer
 
-    init: func(=rootNode) {}
+    init: func ~renderer (=rootNode) {}
 
     onNode: func(node: TNode) {
         node render(context, output)

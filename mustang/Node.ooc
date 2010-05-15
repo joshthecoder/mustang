@@ -27,7 +27,7 @@ TNode: abstract class {
 TextNode: class extends TNode {
     text: String
 
-    init: func(=text) {}
+    init: func ~text (=text) {}
 
     render: func(context: Context, out: Writer) {
         out write(text)
@@ -40,7 +40,7 @@ VariableNode: class extends TNode {
     variableName: String
     escape: Bool
 
-    init: func(=variableName, =escape) {}
+    init: func ~variable (=variableName, =escape) {}
 
     render: func(context: Context, out: Writer) {
         // Perform variable lookup in context
@@ -66,7 +66,7 @@ VariableNode: class extends TNode {
 SectionNode: class extends TNode {
     variableName: String
 
-    init: func(=variableName) {}
+    init: func ~section (=variableName) {}
 
     render: func(context: Context, out: Writer) {
         variable := context resolve(variableName)
@@ -106,7 +106,7 @@ SectionNode: class extends TNode {
 PartialNode: class extends TNode {
     partial: Renderer
 
-    init: func(=partial) {}
+    init: func ~partial (=partial) {}
 
     render: func(context: Context, out: Writer) {
         partial render(context, out)

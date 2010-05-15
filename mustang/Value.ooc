@@ -11,7 +11,7 @@ Value: abstract class {
 StringValue: class extends Value {
     value: String
 
-    init: func(=value) {}
+    init: func ~string (=value) {}
 
     emit: func -> String { value }
 }
@@ -19,7 +19,7 @@ StringValue: class extends Value {
 BoolValue: class extends Value {
     value: Bool
 
-    init: func(=value) {}
+    init: func ~bool (=value) {}
 
     emit: func -> String { value toString() }
 
@@ -30,7 +30,7 @@ BoolValue: class extends Value {
 ListValue: class extends Value {
     list: List<Value>
 
-    init: func ~withList(=list) {}
+    init: func ~withList (=list) {}
     init: func ~empty { list = LinkedList<Value> new() }
 
     emit: func -> String {
